@@ -1,0 +1,558 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Arbion (ARBN) — Utility-first token on BNB Chain</title>
+  <meta name="description" content="Arbion (ARBN) is a utility-first token on BNB Chain. Explore the mission, token details, roadmap, and how to get ARBN." />
+  <meta property="og:title" content="Arbion (ARBN)" />
+  <meta property="og:description" content="Utility-first token on BNB Chain." />
+  <meta property="og:type" content="website" />
+  <meta name="theme-color" content="#0b0f1a" />
+
+  <!-- Tailwind via CDN (fastest to ship). If you want a build setup later, I can convert it. -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['ui-sans-serif', 'system-ui', 'Inter', 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', 'Apple Color Emoji', 'Segoe UI Emoji'],
+            mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New', 'monospace'],
+          },
+          boxShadow: {
+            glow: "0 0 0 1px rgba(255,255,255,0.06), 0 12px 40px rgba(0,0,0,0.5)",
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Subtle animated background */
+    .aurora {
+      background:
+        radial-gradient(600px 300px at 20% 20%, rgba(99,102,241,.35), transparent 60%),
+        radial-gradient(700px 350px at 80% 10%, rgba(34,197,94,.28), transparent 55%),
+        radial-gradient(500px 280px at 80% 80%, rgba(236,72,153,.25), transparent 55%),
+        radial-gradient(600px 320px at 10% 90%, rgba(59,130,246,.25), transparent 55%),
+        linear-gradient(180deg, #070A12 0%, #0B0F1A 45%, #070A12 100%);
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      filter: saturate(1.2);
+    }
+    .noise {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      opacity: .07;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='.6'/%3E%3C/svg%3E");
+      mix-blend-mode: overlay;
+    }
+    .glass {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.10);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+    .ring-gradient {
+      position: absolute;
+      inset: -2px;
+      border-radius: 1.5rem;
+      padding: 1px;
+      background: linear-gradient(120deg, rgba(99,102,241,.9), rgba(34,197,94,.65), rgba(236,72,153,.65));
+      mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      mask-composite: exclude;
+      -webkit-mask-composite: xor;
+      pointer-events: none;
+      opacity: .65;
+    }
+    .fade-up { opacity: 0; transform: translateY(10px); }
+    .fade-up.show { opacity: 1; transform: translateY(0); transition: 700ms cubic-bezier(.2,.8,.2,1); }
+  </style>
+</head>
+
+<body class="min-h-screen text-white font-sans selection:bg-indigo-500/40 selection:text-white">
+  <div class="aurora"></div>
+  <div class="noise"></div>
+
+  <!-- Top Nav -->
+  <header class="sticky top-0 z-50">
+    <div class="mx-auto max-w-7xl px-4 py-3">
+      <div class="glass rounded-2xl shadow-glow">
+        <div class="flex items-center justify-between px-4 py-3 md:px-6">
+          <a href="#top" class="flex items-center gap-2">
+            <div class="h-9 w-9 rounded-xl bg-white/10 border border-white/10 grid place-items-center">
+              <span class="font-bold tracking-tight">A</span>
+            </div>
+            <div class="leading-tight">
+              <div class="font-semibold">Arbion</div>
+              <div class="text-xs text-white/60 -mt-0.5">ARBN • BNB Chain</div>
+            </div>
+          </a>
+
+          <nav class="hidden md:flex items-center gap-6 text-sm text-white/70">
+            <a class="hover:text-white transition" href="#utility">Utility</a>
+            <a class="hover:text-white transition" href="#token">Token</a>
+            <a class="hover:text-white transition" href="#roadmap">Roadmap</a>
+            <a class="hover:text-white transition" href="#faq">FAQ</a>
+          </nav>
+
+          <div class="flex items-center gap-2">
+            <a id="buyLinkTop" href="#buy" class="hidden sm:inline-flex items-center gap-2 rounded-xl bg-white/10 hover:bg-white/15 border border-white/10 px-4 py-2 text-sm transition">
+              <span>Get ARBN</span>
+              <span aria-hidden="true">↗</span>
+            </a>
+            <button id="menuBtn" class="md:hidden inline-flex items-center justify-center h-10 w-10 rounded-xl bg-white/10 hover:bg-white/15 border border-white/10 transition" aria-label="Open menu">
+              ☰
+            </button>
+          </div>
+        </div>
+
+        <div id="mobileMenu" class="hidden md:hidden border-t border-white/10 px-4 py-4 text-sm text-white/70">
+          <div class="flex flex-col gap-3">
+            <a class="hover:text-white transition" href="#utility">Utility</a>
+            <a class="hover:text-white transition" href="#token">Token</a>
+            <a class="hover:text-white transition" href="#roadmap">Roadmap</a>
+            <a class="hover:text-white transition" href="#faq">FAQ</a>
+            <a class="hover:text-white transition" href="#buy">Get ARBN</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <main id="top" class="mx-auto max-w-7xl px-4">
+    <section class="pt-12 md:pt-20 pb-12 md:pb-16">
+      <div class="grid lg:grid-cols-12 gap-8 items-start">
+        <div class="lg:col-span-7">
+          <div class="inline-flex items-center gap-2 rounded-full bg-white/10 border border-white/10 px-3 py-1 text-xs text-white/70">
+            <span class="h-2 w-2 rounded-full bg-green-400"></span>
+            <span>Live on BNB Chain</span>
+            <span class="text-white/40">•</span>
+            <span>Fixed supply</span>
+          </div>
+
+          <h1 class="mt-5 text-4xl md:text-6xl font-semibold tracking-tight leading-[1.05]">
+            Arbion <span class="text-white/60">(ARBN)</span><br/>
+            <span class="bg-clip-text text-transparent"
+              style="background-image: linear-gradient(120deg, rgba(99,102,241,1), rgba(34,197,94,1), rgba(236,72,153,1));">
+              utility-first token
+            </span>
+            built for real adoption.
+          </h1>
+
+          <p class="mt-5 text-base md:text-lg text-white/70 max-w-2xl">
+            ARBN is a community-led token on BNB Chain with a simple, transparent foundation.
+            The roadmap focuses on utility: access, integrations, and governance — not gimmicks.
+          </p>
+
+          <div class="mt-7 flex flex-col sm:flex-row gap-3">
+            <!-- Replace this with your real PancakeSwap swap URL once ready -->
+            <a id="buyLinkHero" href="#buy"
+              class="inline-flex items-center justify-center gap-2 rounded-2xl bg-white text-black px-5 py-3 text-sm font-semibold hover:bg-white/90 transition">
+              Buy ARBN
+              <span aria-hidden="true">→</span>
+            </a>
+            <button id="copyContractBtn"
+              class="inline-flex items-center justify-center gap-2 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/10 px-5 py-3 text-sm font-semibold transition">
+              Copy Contract
+              <span class="text-white/60 font-mono text-xs" id="contractShort">0x…</span>
+            </button>
+            <a href="#token" class="inline-flex items-center justify-center gap-2 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/10 px-5 py-3 text-sm font-semibold transition">
+              Token Details
+              <span aria-hidden="true">↘</span>
+            </a>
+          </div>
+
+          <div class="mt-8 flex flex-wrap gap-3 text-xs text-white/60">
+            <div class="glass rounded-xl px-4 py-2">Standard: BEP-20 (ERC-20 compatible)</div>
+            <div class="glass rounded-xl px-4 py-2">Total Supply: 10,000,000</div>
+            <div class="glass rounded-xl px-4 py-2">No Taxes • No Minting</div>
+          </div>
+        </div>
+
+        <!-- Right card -->
+        <div class="lg:col-span-5">
+          <div class="relative rounded-3xl glass shadow-glow overflow-hidden">
+            <div class="ring-gradient"></div>
+            <div class="p-6 md:p-7">
+              <div class="flex items-start justify-between gap-4">
+                <div>
+                  <div class="text-sm text-white/70">Token Snapshot</div>
+                  <div class="mt-1 text-2xl font-semibold">ARBN</div>
+                </div>
+                <div class="text-right">
+                  <div class="text-xs text-white/60">Network</div>
+                  <div class="text-sm font-semibold">BNB Chain</div>
+                </div>
+              </div>
+
+              <div class="mt-6 grid grid-cols-2 gap-3">
+                <div class="rounded-2xl bg-white/5 border border-white/10 p-4">
+                  <div class="text-xs text-white/60">Supply</div>
+                  <div class="mt-1 text-lg font-semibold">10,000,000</div>
+                </div>
+                <div class="rounded-2xl bg-white/5 border border-white/10 p-4">
+                  <div class="text-xs text-white/60">Decimals</div>
+                  <div class="mt-1 text-lg font-semibold">18</div>
+                </div>
+                <div class="rounded-2xl bg-white/5 border border-white/10 p-4">
+                  <div class="text-xs text-white/60">Contract</div>
+                  <div class="mt-1 text-sm font-mono break-all" id="contractFull">0xPASTE_YOUR_MAINNET_CONTRACT_ADDRESS</div>
+                </div>
+                <div class="rounded-2xl bg-white/5 border border-white/10 p-4">
+                  <div class="text-xs text-white/60">Explorer</div>
+                  <!-- Replace with your BscScan token page -->
+                  <a id="bscscanLink" class="mt-1 inline-flex text-sm font-semibold hover:underline" href="#" target="_blank" rel="noreferrer">
+                    View on BscScan ↗
+                  </a>
+                </div>
+              </div>
+
+              <div class="mt-6 text-xs text-white/60 leading-relaxed">
+                Tip: Verify the contract on BscScan and pin the address on all official channels to prevent imposters.
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4 grid grid-cols-3 gap-3 text-xs">
+            <a class="glass rounded-2xl px-4 py-3 text-white/70 hover:text-white transition" href="#" target="_blank" rel="noreferrer">X / Twitter ↗</a>
+            <a class="glass rounded-2xl px-4 py-3 text-white/70 hover:text-white transition" href="#" target="_blank" rel="noreferrer">Telegram ↗</a>
+            <a class="glass rounded-2xl px-4 py-3 text-white/70 hover:text-white transition" href="#" target="_blank" rel="noreferrer">Docs ↗</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Utility -->
+    <section id="utility" class="py-10 md:py-16">
+      <div class="fade-up">
+        <div class="flex items-end justify-between gap-4">
+          <div>
+            <h2 class="text-2xl md:text-3xl font-semibold tracking-tight">Utility that people actually use</h2>
+            <p class="mt-2 text-white/70 max-w-2xl">
+              ARBN utility can be built without changing the token contract — via apps and companion contracts.
+            </p>
+          </div>
+        </div>
+
+        <div class="mt-6 grid md:grid-cols-3 gap-4">
+          <div class="rounded-3xl glass p-6 shadow-glow">
+            <div class="text-sm font-semibold">Access & Tiers</div>
+            <p class="mt-2 text-sm text-white/70">Hold ARBN to unlock features, drops, and premium tools.</p>
+            <div class="mt-4 text-xs text-white/60 font-mono">balanceOf() gating</div>
+          </div>
+          <div class="rounded-3xl glass p-6 shadow-glow">
+            <div class="text-sm font-semibold">Payments</div>
+            <p class="mt-2 text-sm text-white/70">Use ARBN for in-app purchases, credits, or marketplace fees.</p>
+            <div class="mt-4 text-xs text-white/60 font-mono">Treasury receiver</div>
+          </div>
+          <div class="rounded-3xl glass p-6 shadow-glow">
+            <div class="text-sm font-semibold">Staking for Perks</div>
+            <p class="mt-2 text-sm text-white/70">Stake ARBN to earn perks (not hype): boosts, access, or discounts.</p>
+            <div class="mt-4 text-xs text-white/60 font-mono">Staking contract</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Token details -->
+    <section id="token" class="py-10 md:py-16">
+      <div class="fade-up">
+        <h2 class="text-2xl md:text-3xl font-semibold tracking-tight">Token details</h2>
+        <p class="mt-2 text-white/70 max-w-2xl">Clear, simple, and verifiable — designed to be easy to trust.</p>
+
+        <div class="mt-6 grid lg:grid-cols-12 gap-4">
+          <div class="lg:col-span-7 rounded-3xl glass p-6 shadow-glow">
+            <div class="flex items-center justify-between gap-4">
+              <div>
+                <div class="text-sm text-white/70">Arbion (ARBN)</div>
+                <div class="text-2xl font-semibold mt-1">Fixed supply • No taxes</div>
+              </div>
+              <span class="text-xs rounded-full bg-white/10 border border-white/10 px-3 py-1 text-white/70">BEP-20</span>
+            </div>
+
+            <div class="mt-6 grid sm:grid-cols-2 gap-4 text-sm">
+              <div class="rounded-2xl bg-white/5 border border-white/10 p-4">
+                <div class="text-white/60 text-xs">Total Supply</div>
+                <div class="mt-1 font-semibold">10,000,000 ARBN</div>
+              </div>
+              <div class="rounded-2xl bg-white/5 border border-white/10 p-4">
+                <div class="text-white/60 text-xs">Network</div>
+                <div class="mt-1 font-semibold">BNB Chain (Mainnet)</div>
+              </div>
+              <div class="rounded-2xl bg-white/5 border border-white/10 p-4">
+                <div class="text-white/60 text-xs">Contract</div>
+                <div class="mt-1 font-mono text-xs break-all" id="contractFull2">0xPASTE_YOUR_MAINNET_CONTRACT_ADDRESS</div>
+              </div>
+              <div class="rounded-2xl bg-white/5 border border-white/10 p-4">
+                <div class="text-white/60 text-xs">Status</div>
+                <div class="mt-1 font-semibold">Live & Transferable</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="lg:col-span-5 rounded-3xl glass p-6 shadow-glow">
+            <div class="text-sm font-semibold">Transparency</div>
+            <p class="mt-2 text-sm text-white/70">
+              We’ll publish the verified contract, official links, and ongoing updates.
+              Always verify the contract address before swapping.
+            </p>
+            <div class="mt-5 flex flex-col gap-2 text-sm">
+              <a class="inline-flex items-center justify-between rounded-2xl bg-white/5 border border-white/10 px-4 py-3 hover:bg-white/10 transition" href="#" target="_blank" rel="noreferrer">
+                <span>BscScan Verified Contract</span><span>↗</span>
+              </a>
+              <a class="inline-flex items-center justify-between rounded-2xl bg-white/5 border border-white/10 px-4 py-3 hover:bg-white/10 transition" href="#" target="_blank" rel="noreferrer">
+                <span>Whitepaper / Litepaper</span><span>↗</span>
+              </a>
+              <a class="inline-flex items-center justify-between rounded-2xl bg-white/5 border border-white/10 px-4 py-3 hover:bg-white/10 transition" href="#" target="_blank" rel="noreferrer">
+                <span>Security Notes</span><span>↗</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Roadmap -->
+    <section id="roadmap" class="py-10 md:py-16">
+      <div class="fade-up">
+        <h2 class="text-2xl md:text-3xl font-semibold tracking-tight">Roadmap</h2>
+        <p class="mt-2 text-white/70 max-w-2xl">A realistic build plan. Replace these with your real milestones.</p>
+
+        <div class="mt-6 grid md:grid-cols-3 gap-4">
+          <div class="rounded-3xl glass p-6 shadow-glow">
+            <div class="text-xs text-white/60">Phase 1</div>
+            <div class="mt-1 text-lg font-semibold">Launch & Foundations</div>
+            <ul class="mt-3 text-sm text-white/70 space-y-2 list-disc list-inside">
+              <li>Verified contract & official channels</li>
+              <li>Liquidity + swap guide</li>
+              <li>Initial utility spec</li>
+            </ul>
+          </div>
+          <div class="rounded-3xl glass p-6 shadow-glow">
+            <div class="text-xs text-white/60">Phase 2</div>
+            <div class="mt-1 text-lg font-semibold">Utility & Integrations</div>
+            <ul class="mt-3 text-sm text-white/70 space-y-2 list-disc list-inside">
+              <li>Token-gated access tiers</li>
+              <li>Payment integrations</li>
+              <li>Staking-for-perks</li>
+            </ul>
+          </div>
+          <div class="rounded-3xl glass p-6 shadow-glow">
+            <div class="text-xs text-white/60">Phase 3</div>
+            <div class="mt-1 text-lg font-semibold">Governance & Expansion</div>
+            <ul class="mt-3 text-sm text-white/70 space-y-2 list-disc list-inside">
+              <li>Community governance pilot</li>
+              <li>Ecosystem partnerships</li>
+              <li>CEX readiness package</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Buy -->
+    <section id="buy" class="py-10 md:py-16">
+      <div class="fade-up relative rounded-3xl glass p-6 md:p-10 shadow-glow overflow-hidden">
+        <div class="ring-gradient"></div>
+        <div class="max-w-3xl">
+          <h2 class="text-2xl md:text-3xl font-semibold tracking-tight">How to get ARBN</h2>
+          <p class="mt-2 text-white/70">
+            Buy ARBN on BNB Chain using a trusted DEX. Always confirm the contract address before swapping.
+          </p>
+
+          <div class="mt-6 flex flex-col sm:flex-row gap-3">
+            <!-- Replace with real swap link once you have liquidity -->
+            <a id="swapLink"
+               href="#"
+               class="inline-flex items-center justify-center gap-2 rounded-2xl bg-white text-black px-5 py-3 text-sm font-semibold hover:bg-white/90 transition"
+               target="_blank" rel="noreferrer">
+              Swap on PancakeSwap ↗
+            </a>
+            <button id="copyContractBtn2"
+              class="inline-flex items-center justify-center gap-2 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/10 px-5 py-3 text-sm font-semibold transition">
+              Copy ARBN Contract
+              <span class="text-white/60 font-mono text-xs" id="contractShort2">0x…</span>
+            </button>
+          </div>
+
+          <div class="mt-5 text-xs text-white/60">
+            Pro tip: pin the contract address on your official X/Telegram and your website to reduce impersonation scams.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="py-10 md:py-16">
+      <div class="fade-up">
+        <h2 class="text-2xl md:text-3xl font-semibold tracking-tight">FAQ</h2>
+
+        <div class="mt-6 grid lg:grid-cols-2 gap-4">
+          <details class="rounded-3xl glass p-6 shadow-glow">
+            <summary class="cursor-pointer font-semibold">Is ARBN audited?</summary>
+            <p class="mt-3 text-sm text-white/70">
+              If you have an audit, link it here. If not, start with a public code review and keep the token contract simple.
+            </p>
+          </details>
+          <details class="rounded-3xl glass p-6 shadow-glow">
+            <summary class="cursor-pointer font-semibold">How do I verify the real contract?</summary>
+            <p class="mt-3 text-sm text-white/70">
+              Use the verified contract on BscScan and compare it with the address pinned on official channels.
+            </p>
+          </details>
+          <details class="rounded-3xl glass p-6 shadow-glow">
+            <summary class="cursor-pointer font-semibold">Why fixed supply?</summary>
+            <p class="mt-3 text-sm text-white/70">
+              Fixed supply keeps the foundation simple and predictable. Utility is built through apps and integrations.
+            </p>
+          </details>
+          <details class="rounded-3xl glass p-6 shadow-glow">
+            <summary class="cursor-pointer font-semibold">Is this financial advice?</summary>
+            <p class="mt-3 text-sm text-white/70">
+              No. This is a technology project site template. Make sure your messaging stays accurate and compliant.
+            </p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-10 text-white/60 text-sm">
+      <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-t border-white/10 pt-6">
+        <div>
+          <div class="font-semibold text-white">Arbion (ARBN)</div>
+          <div class="text-xs mt-1">© <span id="year"></span> Arbion. All rights reserved.</div>
+        </div>
+        <div class="flex flex-wrap gap-4">
+          <a class="hover:text-white transition" href="#">X</a>
+          <a class="hover:text-white transition" href="#">Telegram</a>
+          <a class="hover:text-white transition" href="#">Docs</a>
+          <a class="hover:text-white transition" href="#">Terms</a>
+          <a class="hover:text-white transition" href="#">Privacy</a>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    // ====== CONFIG (edit these) ======
+    const CONFIG = {
+      contract: "0xPASTE_YOUR_MAINNET_CONTRACT_ADDRESS",
+      bscscanTokenUrl: "https://bscscan.com/token/0xPASTE_YOUR_MAINNET_CONTRACT_ADDRESS",
+      swapUrl: "https://pancakeswap.finance/swap?outputCurrency=0xPASTE_YOUR_MAINNET_CONTRACT_ADDRESS",
+      socials: {
+        x: "https://x.com/YOUR_HANDLE",
+        telegram: "https://t.me/YOUR_CHANNEL",
+        docs: "https://YOUR_DOMAIN/docs"
+      }
+    };
+
+    // ====== Helpers ======
+    const shortAddr = (a) => (a && a.startsWith("0x") && a.length > 12) ? `${a.slice(0,6)}…${a.slice(-4)}` : a;
+
+    function setLinks() {
+      // Contract text
+      const c = CONFIG.contract;
+      document.getElementById("contractFull").textContent = c;
+      document.getElementById("contractFull2").textContent = c;
+      document.getElementById("contractShort").textContent = shortAddr(c);
+      document.getElementById("contractShort2").textContent = shortAddr(c);
+
+      // Explorer
+      const b = document.getElementById("bscscanLink");
+      b.href = CONFIG.bscscanTokenUrl;
+
+      // Swap
+      const s = document.getElementById("swapLink");
+      s.href = CONFIG.swapUrl;
+
+      // Socials (top grid)
+      const socialLinks = Array.from(document.querySelectorAll('a[href="#"][target="_blank"]'));
+      // first 3 are X / Telegram / Docs
+      if (socialLinks.length >= 3) {
+        socialLinks[0].href = CONFIG.socials.x;
+        socialLinks[1].href = CONFIG.socials.telegram;
+        socialLinks[2].href = CONFIG.socials.docs;
+      }
+
+      // Footer socials (first 3 in footer)
+      const footerLinks = Array.from(document.querySelectorAll("footer a"));
+      if (footerLinks.length >= 3) {
+        footerLinks[0].href = CONFIG.socials.x;
+        footerLinks[1].href = CONFIG.socials.telegram;
+        footerLinks[2].href = CONFIG.socials.docs;
+      }
+
+      // “Buy ARBN” buttons
+      document.getElementById("buyLinkHero").href = CONFIG.swapUrl;
+      document.getElementById("buyLinkTop").href = CONFIG.swapUrl;
+    }
+
+    async function copyToClipboard(text) {
+      try {
+        await navigator.clipboard.writeText(text);
+        return true;
+      } catch {
+        // Fallback for older browsers
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        const ok = document.execCommand("copy");
+        document.body.removeChild(ta);
+        return ok;
+      }
+    }
+
+    // ====== UI behavior ======
+    document.getElementById("menuBtn").addEventListener("click", () => {
+      const m = document.getElementById("mobileMenu");
+      m.classList.toggle("hidden");
+    });
+
+    document.getElementById("copyContractBtn").addEventListener("click", async () => {
+      const ok = await copyToClipboard(CONFIG.contract);
+      alert(ok ? "Contract copied!" : "Could not copy. Please copy manually.");
+    });
+    document.getElementById("copyContractBtn2").addEventListener("click", async () => {
+      const ok = await copyToClipboard(CONFIG.contract);
+      alert(ok ? "Contract copied!" : "Could not copy. Please copy manually.");
+    });
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener("click", (e) => {
+        const href = a.getAttribute("href");
+        if (!href || href === "#") return;
+        const el = document.querySelector(href);
+        if (el) {
+          e.preventDefault();
+          el.scrollIntoView({ behavior: "smooth", block: "start" });
+          const m = document.getElementById("mobileMenu");
+          if (m && !m.classList.contains("hidden")) m.classList.add("hidden");
+        }
+      });
+    });
+
+    // Fade-in on scroll
+    const observer = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        if (e.isIntersecting) e.target.classList.add("show");
+      }
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll(".fade-up").forEach(el => observer.observe(el));
+
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    setLinks();
+  </script>
+</body>
+</html>
