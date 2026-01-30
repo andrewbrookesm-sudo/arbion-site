@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Security & Audit Status — Arbion Docs</title>
+  <meta name="theme-color" content="#0b0f1a" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .glass{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.10);backdrop-filter:blur(14px)}
+    body{background:linear-gradient(180deg,#070A12 0%,#0B0F1A 45%,#070A12 100%)}
+    a{word-break:break-word}
+    code{background:rgba(255,255,255,.06);padding:.15rem .35rem;border-radius:.5rem;border:1px solid rgba(255,255,255,.08)}
+  </style>
+</head>
+<body class="min-h-screen text-white">
+  <main class="mx-auto max-w-4xl px-4 py-10">
+    <div class="flex items-center justify-between gap-4">
+      <a href="/arbion-site/docs/" class="text-white/70 hover:text-white">← Docs</a>
+      <a href="/arbion-site/" class="text-white/70 hover:text-white">Site ↗</a>
+    </div>
+
+    <header class="mt-6 glass rounded-3xl p-6">
+      <h1 class="text-3xl font-semibold tracking-tight">Security & Audit Status</h1>
+      <p class="mt-2 text-white/70">
+        How we think about safety, what’s live today, and what will be audited before major upgrades (staking/perks).
+      </p>
+    </header>
+
+    <section class="mt-6 glass rounded-3xl p-6">
+      <h2 class="text-xl font-semibold">Current status</h2>
+      <ul class="mt-2 text-sm text-white/70 space-y-2">
+        <li><span class="text-white/60">Token contract:</span> Live on BNB Chain</li>
+        <li><span class="text-white/60">Planned:</span> Payments integrations + staking-perks contract(s)</li>
+        <li><span class="text-white/60">Audit:</span> Not yet completed (this page tracks progress)</li>
+      </ul>
+      <p class="mt-4 text-sm text-white/70 font-mono break-all">
+        Contract: 0x16C7eE66633586f781fc47960221DC1bF108906F
+      </p>
+    </section>
+
+    <section class="mt-6 glass rounded-3xl p-6">
+      <h2 class="text-xl font-semibold">Threat model (plain English)</h2>
+      <ul class="mt-3 text-sm text-white/70 space-y-2 list-disc list-inside">
+        <li><b>Fake tokens / phishing:</b> users are tricked into buying an impostor contract address.</li>
+        <li><b>DEX risks:</b> price impact and slippage, MEV, and low-liquidity manipulation.</li>
+        <li><b>Admin key risks:</b> if future contracts have admin controls, compromised keys can harm users.</li>
+        <li><b>Staking contract risks:</b> bugs can lock funds or allow unfair withdrawals if not audited.</li>
+      </ul>
+    </section>
+
+    <section class="mt-6 glass rounded-3xl p-6">
+      <h2 class="text-xl font-semibold">Audit plan (what we will do)</h2>
+      <ol class="mt-3 text-sm text-white/70 space-y-2 list-decimal list-inside">
+        <li>Publish all smart contract source code in a public repo.</li>
+        <li>Tag a release (e.g., <code>v1.0.0</code>) that matches the deployed bytecode.</li>
+        <li>Run automated analysis (Slither/static checks) and fix findings.</li>
+        <li>Engage a reputable auditor for any staking / treasury / vesting contracts.</li>
+        <li>Publish the audit report here and track fixes.</li>
+      </ol>
+      <p class="mt-4 text-xs text-white/50">
+        We will not claim “audited” until a third-party report is published.
+      </p>
+    </section>
+
+    <footer class="mt-10 text-xs text-white/50">
+      Security is a process. If you find an issue, contact us via the official X account.
+    </footer>
+  </main>
+</body>
+</html>
